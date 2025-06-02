@@ -1,0 +1,20 @@
+name: Export Docker Image to TAR
+
+on:
+  workflow_dispatch:  # Cho phép chạy bằng tay từ GitHub UI
+
+jobs:
+  export-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Docker image from GCR
+        run: docker pull gcr.io/kaggle-gpu-images/python:latest
+
+      - name: Save Docker image as TAR
+        run: docker save -o kaggle-python.tar gcr.io/kaggle-gpu-images/python:latest
+
+      - name: Upload TAR as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: kaggle-docker-image
+          path: kaggle-python.tar
